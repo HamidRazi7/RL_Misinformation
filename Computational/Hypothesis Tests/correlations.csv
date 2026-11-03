@@ -1,0 +1,49 @@
+study,comparison,covariance,parameter,r
+1,np ~ pa,diagonal,Conf_True,0.920367094191726
+1,np ~ pa,diagonal,Disconf_True,0.9486221245249922
+1,np ~ pa,diagonal,Conf_False,0.9564191797962525
+1,np ~ pa,diagonal,Disconf_False,0.9503911367495534
+1,np ~ pa,diagonal,Beta,0.9844435205243323
+1,np ~ pa,diagonal,rho,0.9982850955686784
+1,np ~ pa,full,Conf_True,0.9999981833164797
+1,np ~ pa,full,Disconf_True,0.9999950578316007
+1,np ~ pa,full,Conf_False,0.9999956712627572
+1,np ~ pa,full,Disconf_False,0.9999928301656478
+1,np ~ pa,full,Beta,0.9999994636476852
+1,np ~ pa,full,rho,0.9999870096407952
+1,published pa ~ refit pa,diagonal,Conf_True,0.9999967882844449
+1,published pa ~ refit pa,diagonal,Disconf_True,0.9999980978294496
+1,published pa ~ refit pa,diagonal,Conf_False,0.9999965608052098
+1,published pa ~ refit pa,diagonal,Disconf_False,0.9999943239883018
+1,published pa ~ refit pa,diagonal,Beta,0.9999990673752844
+1,published pa ~ refit pa,diagonal,rho,0.9999998402298735
+1,published pa ~ refit pa,full,Conf_True,0.9999997406411492
+1,published pa ~ refit pa,full,Disconf_True,0.9999996578992333
+1,published pa ~ refit pa,full,Conf_False,0.9999996855057602
+1,published pa ~ refit pa,full,Disconf_False,0.9999993722673349
+1,published pa ~ refit pa,full,Beta,0.9999998306109319
+1,published pa ~ refit pa,full,rho,0.999998814852751
+2,np ~ pa,diagonal,Conf_True,0.9278397809569129
+2,np ~ pa,diagonal,Disconf_True,0.9784358764888164
+2,np ~ pa,diagonal,Conf_False,0.9598544357407911
+2,np ~ pa,diagonal,Disconf_False,0.12789768465239648
+2,np ~ pa,diagonal,Beta,0.975174053969272
+2,np ~ pa,diagonal,rho,0.9994474535835408
+2,np ~ pa,full,Conf_True,0.9999331281156916
+2,np ~ pa,full,Disconf_True,0.9999621854978858
+2,np ~ pa,full,Conf_False,0.9994081488386929
+2,np ~ pa,full,Disconf_False,0.9998080378102869
+2,np ~ pa,full,Beta,0.9999534085059022
+2,np ~ pa,full,rho,0.999986586539117
+2,published pa ~ refit pa,diagonal,Conf_True,0.9999999312656931
+2,published pa ~ refit pa,diagonal,Disconf_True,0.9999999871440738
+2,published pa ~ refit pa,diagonal,Conf_False,0.9999998532155316
+2,published pa ~ refit pa,diagonal,Disconf_False,0.9999066029076606
+2,published pa ~ refit pa,diagonal,Beta,0.9999999185329526
+2,published pa ~ refit pa,diagonal,rho,0.9999999934411461
+2,published pa ~ refit pa,full,Conf_True,0.9999999995267949
+2,published pa ~ refit pa,full,Disconf_True,0.9999999973444764
+2,published pa ~ refit pa,full,Conf_False,0.9999999956958495
+2,published pa ~ refit pa,full,Disconf_False,0.999999999583799
+2,published pa ~ refit pa,full,Beta,0.9999999991981913
+2,published pa ~ refit pa,full,rho,0.9999999990808804

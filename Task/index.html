@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>...</title>
+		
+		<!-- Load libraries -->
+		<script src="./jspsych-6.3.1/jspsych.js"></script>
+		
+		<!-- Load jsPsych plug-ins -->
+		<script src="./jspsych-6.3.1/jspsych.js"></script>
+		<script src="./jspsych-6.3.1/plugins/jspsych-instructions.js"></script>
+		<script src="./jspsych-6.3.1/plugins/jspsych-preload.js"></script>
+		<script src="./jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+		<script src="./jspsych-6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
+		<script src="./jspsych-6.3.1/plugins/jspsych-fullscreen.js"></script>
+		
+		<script src="./js/jspsych-pavlovia-2020.4.js"></script>
+		<script src="./js/jquery-3.6.2.min.js"></script>
+		<script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="./axios.min.js"></script>
+		<script src="./js/functions.js"></script>
+		<script src="./js/variables.js"></script>
+		<script src="./js/comprehension.js"></script>
+		<script src="./js/instructions.js"></script>
+		<script src="./js/questions.js"></script>
+
+		<script src="./js/comments.js"></script>
+		<script src="./js/consent_form_p1.js"></script>
+		<script src="./js/consent_form_p2.js"></script>
+		<script src="./js/user_data_form.js"></script>
+		
+		<!-- Load CSS styles -->
+		<link href="./jspsych-6.3.1/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+		<link href="./css/style.css" rel="stylesheet" type="text/css"></link>
+		
+	</head>
+	
+	<body></body>
+	
+	<script>
+	// capture info from Prolific
+	var subject_id = jsPsych.data.getURLVariable('PROLIFIC_PID');
+	var study_id = jsPsych.data.getURLVariable('STUDY_ID');
+	var session_id = jsPsych.data.getURLVariable('SESSION_ID');
+	jsPsych.data.addProperties({
+		subject_id: subject_id,
+		study_id: study_id,
+		session_id: session_id
+	});
+	var user_age = '';
+	var user_gender = '';
+	var user_comments = '';
+	
+	/* Stores info received by Pavlovia */
+    var pavloviaInfo;
+	/* init connection with pavlovia.org */
+	var pavlovia_init = {
+		type: "pavlovia",
+		command: "init",
+		// Store info received by Pavlovia init into the global variable `pavloviaInfo`
+		setPavloviaInfo: function (info) {
+			console.log(info);
+			pavloviaInfo = info;
+		}
+	};
+	
+	/* finish connection with pavlovia.org */
+	var pavlovia_finish = {
+		type: "pavlovia",
+		command: "finish",
+		participantId: "JSPSYCH-DEMO",
+        // Thomas Pronk; your filter function here
+        dataFilter: function(data) {
+            // Printing the data received from jsPsych.data.get().csv(); a CSV data structure
+            console.log(data);
+            // You can also access the data directly, for instance getting it as JSON
+            console.log(jsPsych.data.get().json());
+			
+			data = '';
+			data+= functions.save_csv(task,questions);
+			data+= '\nSubject Id,'+subject_id+'\nStudy Id,'+study_id+'\nSession Id,'+session_id;
+			data+= '\nAge,'+user_age+'\nGender,'+user_gender+'\nComments,'+user_comments;
+			data+= '\nBonus,'+functions.f_bonus(task);
+			
+            // Return whatever data you'd like to store
+            return data;
+        },
+        // Thomas Pronk; call this function when we're done with the experiment and data reception has been confirmed by Pavlovia
+        completedCallback: function() {
+            alert('data successfully submitted!');
+        }
+	};
+	// Define image preloading.
+	var preload = {
+		type: 'preload',
+		images: preload_images,
+		message: 'Loading images. This may take a moment depending on your internet connection.'
+	}
+    //------------------------------------
+    // Messages and landing pages
+    //------------------------------------
+
+    // define welcome message
+    var welcome = {
+        type: "html-keyboard-response",
+        stimulus: "Welcome to this experiment! Press any key to begin."
+    };
+	
+    // define experiment end message
+    var expt_end = {
+        type: "html-keyboard-response",
+        stimulus: function() {
+			return '<p style="font-size:3rem;">Bonus: <span style="color:red;">'+functions.f_bonus(task)+
+				'</span></p><p>Thank you for participating in this study. Your time and efforts are much appreciated. </p>'+
+				'<p>The study you just participated in explores how people learn the value of different options in their environment, react to different types of information, and use this information to help make choices. We hope that a better understanding of these processes will contribute to the development of a comprehensive theory of decision making, help understand and intervene in cases where decision making exhibits inconsistencies and where the processes involved relate to symptoms that occur in individuals with poor mental health. </p>'+
+				'<p>If you have any questions, worries or concerns regarding this study please feel free to ask or contact the researcher or supervisor of this study either now, or at a later date. If you wish to withdraw your data, please contact the researcher immediately.</p>'+
+				'<p>If you remain unhappy or wish to make a formal complaint, please contact the Ethics Committee who will seek to resolve the matter as soon as possible:</p>'+
+				'<p>Thank you again for your participation. Press any key to quit.</p>';
+		},
+    };
+	
+	var comments = {
+        type: 'misinformation-comments'
+    };
+	
+	var user_data_form = {
+		type: 'misinformation-user-data-form'
+	};
+	
+	var consent_form = {
+		timeline: [
+			{
+				type: 'consent-form-p2'
+			},
+			{
+				type: 'consent-form-p1'
+			}
+		],
+	};
+	
+    //------------------------------------
+    // Functions to turn fullscreen on/off
+    //------------------------------------
+
+    var fullscreen_on = {
+        type: "fullscreen",
+        fullscreen_mode: true,
+    };
+
+    var fullscreen_off = {
+        type: "fullscreen",
+        fullscreen_mode: false
+    };
+    
+	var task = functions.new_blocks();
+	task.set_blocks_trials(task_blocks_trials, task_catch_trial_size, null, null, null, null);
+	
+	save_table_data = {
+		type: "html-keyboard-response",
+		stimulus: function() {
+			return '..... SAVE .....';
+		},
+		choices: jsPsych.NO_KEYS,
+		trial_duration: 1500,
+		on_finish: function() {
+			functions.save_table(task);
+		}
+	};
+  
+
+	
+   //------------------------------------
+    // Put it all in a timeline
+    //------------------------------------
+   
+    // Add variables to timeline in relevant order
+	var timeline = [
+    //pavlovia_init,      // Initializes connection to Pavlovia server for online data collection
+                         // Currently disabled for offline testing/development
+    
+    preload,             // Preloads all experimental stimuli (images) to ensure smooth presentation
+    
+    welcome,             // Presents initial welcome screen to participants
+    
+    //consent_form,      // Ethical compliance component - presents informed consent documentation
+                         // Currently disabled, implement when running with human subjects
+    
+    fullscreen_on,       // Enforces fullscreen mode to control stimulus presentation parameters
+                         // Ensures standardized viewing conditions across participants
+    
+    //user_data_form,    // Collects demographic and participant metadata
+                         // Currently disabled - enable when collecting participant characteristics
+    
+    //instructions,      // Presents experimental instructions and training
+                         // Currently disabled - enable to ensure participant task comprehension
+    
+    task,               // The main task
+    
+    save_table_data,   //  detailed trial-by-trial information for offline
+    
+    questions,         // Post-task questionnaires or debriefing measures
+                         // Currently disabled - enable for collecting post-experimental data
+    
+    expt_end,           // Presents completion message and debriefing information
+                         
+    
+    //pavlovia_finish,    // Terminates Pavlovia connection and ensures data transmission
+                         // Essential for online data collection 
+    
+    fullscreen_off      // Releases fullscreen mode upon experiment completion
+                         // Returns participant's display to normal viewing mode
+];
+
+    //------------------------------------
+    // Set up and run the experiment
+    //------------------------------------
+    
+    jsPsych.init({
+        timeline: timeline,
+        show_preload_progress_bar: true,
+        preload_images: [],
+          on_finish: function(){
+    window.location = "https://app.prolific.com/submissions/complete?cc=COMPLETION_CODE"
+  }
+            
+      
+        
+    });
+	</script>
+</html>
